@@ -5,7 +5,7 @@ const genarateToken = (payload) => {
     issuer: "Logeshwar",
     subject: "Jwt token for authentication",
     audience: payload.email,
-    expiresIn: "15min",
+    expiresIn: "10min",
     algorithm: "RS256",
   };
   let token = jwt.sign(payload, auth_token_private_key, verifyOptions);

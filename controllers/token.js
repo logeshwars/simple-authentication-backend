@@ -16,17 +16,21 @@ const token = async (req, res) => {
         userId: payload.id,
       },
     });
-    console.log("dbToken", dbToken);
     if (!dbToken) throw new Error("Token does not exisit in DB");
     const query = await prisma.logins.delete({
       where: {
         id: dbToken.id,
       },
     });
-    const authToken = genarateToken({ email: payload.email, id: payload.id });
+    const authToken = genarateToken({
+      email: payload.email,
+      id: payload.id,
+      userName: payload.userName,
+    });
     const newRefreshToken = await genarateRefreshToken({
       email: payload.email,
       id: payload.id,
+      userName: payload.userName,
     });
     res.cookie("AuthToken", authToken, { httpOnly: true });
     res.cookie("RefreshToken", newRefreshToken, { httpOnly: true });
@@ -37,7 +41,6 @@ const token = async (req, res) => {
       messages.successToken
     );
   } catch (err) {
-    console.log(err);
     responseCreater(
       res,
       statusCode.Unauthorized,

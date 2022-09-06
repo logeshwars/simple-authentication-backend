@@ -35,14 +35,15 @@ const users = async (req, res) => {
         orderBy: { dob: "desc" },
       });
       const last_page = Math.floor((await prisma.user.count()) / _limit);
-      if (users.length === 0)
+      if (users.length === 0) {
+        console.log(_page, "len", users.length);
         return responseCreator(
           res,
           statusCode.NotFound,
           statusText.NoContent,
           messages.invalidParams
         );
-
+      }
       responseCreator(
         res,
         statusCode.OK,

@@ -27,10 +27,14 @@ const login = async (req, res) => {
         messages.invalidCred
       );
     }
-    const token = genarateToken({ email: user.email, id: user.id });
-    const refreshToken = await genarateRefreshToken({
-      session_id: req.session,
+    const token = genarateToken({
       email: user.email,
+      id: user.id,
+      userName: user.userName,
+    });
+    const refreshToken = await genarateRefreshToken({
+      email: user.email,
+      userName: user.userName,
       id: user.id,
     });
     res.cookie("AuthToken", token, { httpOnly: true });
@@ -42,7 +46,7 @@ const login = async (req, res) => {
       messages.logedin
     );
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
     responseCreater(
       res,
       statusCode.BadRequest,

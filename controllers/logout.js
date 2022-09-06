@@ -13,7 +13,6 @@ const logout = async (req, res) => {
     res.clearCookie("RefreshToken");
     responseCreater(res, statusCode.OK, statusText.Accepted, messages.logout);
   } catch (err) {
-    console.log(err.message);
     responseCreater(
       res,
       statusCode.ServerError,
