@@ -26,8 +26,9 @@ model Logins {
   id           String   @id @default(uuid())
   refreshToken String
   loginTime    DateTime @default(now())
+  jwtid        String
   userId       String
   logins       User     @relation("logins", fields: [userId], references: [id])
 
-  @@unique([userId])
+  @@unique([userId, jwtid])
 }

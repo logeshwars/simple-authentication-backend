@@ -4,10 +4,11 @@ import genarateRefreshToken from "../jwt-utils/genarateRefreshToken.js";
 import bcrypt from "bcrypt";
 import responseCreater from "../utils/responseCreater.js";
 import { messages, statusCode, statusText } from "../constants/responses.js";
+import { v4 as uuidv4 } from "uuid";
 const prisma = new PrismaClient();
-
 const login = async (req, res) => {
   const { email, password } = req.body;
+  const uuid = uuidv4();
   try {
     const user = await prisma.user.findFirst({ where: { email } });
     if (!user) {
@@ -27,16 +28,23 @@ const login = async (req, res) => {
         messages.invalidCred
       );
     }
-    const token = genarateToken({
-      email: user.email,
-      id: user.id,
-      userName: user.userName,
-    });
-    const refreshToken = await genarateRefreshToken({
-      email: user.email,
-      userName: user.userName,
-      id: user.id,
-    });
+    console.log(user.id);
+    const token = genarateToken(
+      {
+        email: user.email,
+        id: user.id,
+        userName: user.userName,
+      },
+      uuid
+    );
+    const refreshToken = await genarateRefreshToken(
+      {
+        email: user.email,
+        userName: user.userName,
+        id: user.id,
+      },
+      uuid
+    );
     res.cookie("AuthToken", token, { httpOnly: true });
     res.cookie("RefreshToken", refreshToken, { httpOnly: true });
     return responseCreater(

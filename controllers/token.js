@@ -8,30 +8,37 @@ const prisma = new PrismaClient();
 const token = async (req, res) => {
   try {
     const { RefreshToken } = req.cookies;
-    if (!RefreshToken) throw new Error("Token does not exisit");
+    if (!RefreshToken) throw new Error("Token does not exsist");
     const payload = verifyRefreshToken(RefreshToken);
     if (!payload) throw new Error("Invalid token");
     const dbToken = await prisma.logins.findFirst({
       where: {
-        userId: payload.id,
+        jwtid: payload.jti,
       },
     });
     if (!dbToken) throw new Error("Token does not exisit in DB");
-    const query = await prisma.logins.delete({
+    if (dbToken.jwtid !== payload.jti) throw new Error("Invalid Token");
+    const query = await prisma.logins.deleteMany({
       where: {
-        id: dbToken.id,
+        jwtid: dbToken.jwtid,
       },
     });
-    const authToken = genarateToken({
-      email: payload.email,
-      id: payload.id,
-      userName: payload.userName,
-    });
-    const newRefreshToken = await genarateRefreshToken({
-      email: payload.email,
-      id: payload.id,
-      userName: payload.userName,
-    });
+    const authToken = genarateToken(
+      {
+        email: payload.email,
+        id: payload.id,
+        userName: payload.userName,
+      },
+      payload.jti
+    );
+    const newRefreshToken = await genarateRefreshToken(
+      {
+        email: payload.email,
+        id: payload.id,
+        userName: payload.userName,
+      },
+      payload.jti
+    );
     res.cookie("AuthToken", authToken, { httpOnly: true });
     res.cookie("RefreshToken", newRefreshToken, { httpOnly: true });
     responseCreater(
@@ -41,6 +48,7 @@ const token = async (req, res) => {
       messages.successToken
     );
   } catch (err) {
+    console.log(err.message);
     responseCreater(
       res,
       statusCode.Unauthorized,

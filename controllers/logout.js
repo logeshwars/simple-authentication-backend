@@ -5,14 +5,15 @@ import responseCreater from "../utils/responseCreater.js";
 const prisma = new PrismaClient();
 const logout = async (req, res) => {
   try {
-    const { id } = await verifyRefreshToken(req.cookies.RefreshToken);
+    const { jti } = await verifyRefreshToken(req.cookies.RefreshToken);
     const deleteToken = await prisma.logins.deleteMany({
-      where: { userId: id },
+      where: { jwtid: jti },
     });
     res.clearCookie("AuthToken");
     res.clearCookie("RefreshToken");
     responseCreater(res, statusCode.OK, statusText.Accepted, messages.logout);
   } catch (err) {
+    console.log(err.message);
     responseCreater(
       res,
       statusCode.ServerError,

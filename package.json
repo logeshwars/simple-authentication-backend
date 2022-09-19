@@ -25,6 +25,7 @@
     "nodemon": "^2.0.19",
     "prisma": "^4.1.1",
     "typenode": "^0.5.1",
-    "typescript": "^4.7.4"
+    "typescript": "^4.7.4",
+    "uuid": "^9.0.0"
   }
 }
