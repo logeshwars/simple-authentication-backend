@@ -19,7 +19,7 @@ app.get("/", (req, res) => {
 
 app.use("/user", user);
 app.get("*", (req, res) => {
-  return res.status(404).send("NOT FOUND");
+  res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
 app.listen(port, (err) => {
