@@ -1,29 +1,20 @@
-import { messages, statusCode, statusText } from "../constants/responses.js";
-import verifyToken from "../jwt-utils/verifyToken.js";
-import responseCreater from "../utils/responseCreater.js";
+/** @format */
+
+import resConst from '../constants/responses.js';
+import { verifyToken } from '../jwt_functions/index.js';
+import responseCreator from '../utils/responseCreator.js';
 const getUserByToken = (req, res) => {
-  const { AuthToken } = req.cookies;
-  try {
-    const payload = verifyToken(AuthToken);
-    const data = {
-      email: payload.email,
-      id: payload.id,
-      userName: payload.userName,
-    };
-    return responseCreater(
-      res,
-      statusCode.OK,
-      statusText.OK,
-      messages.created,
-      data
-    );
-  } catch (err) {
-    return responseCreater(
-      res,
-      statusCode.Unauthorized,
-      statusText.Unauthorized,
-      messages.invalidToken
-    );
-  }
+	const { AuthToken } = req.cookies;
+	try {
+		const payload = verifyToken(AuthToken);
+		const data = {
+			email: payload.email,
+			id: payload.id,
+			userName: payload.userName,
+		};
+		return responseCreator(res, resConst.status.OK, resConst.messages.created, data);
+	} catch (err) {
+		return responseCreator(res, resConst.status.Unauthorized, resConst.messages.invalidToken);
+	}
 };
 export default getUserByToken;

@@ -1,61 +1,79 @@
-import { PrismaClient } from "@prisma/client";
-import { messages, statusCode, statusText } from "../constants/responses.js";
-import genarateRefreshToken from "../jwt-utils/genarateRefreshToken.js";
-import genarateToken from "../jwt-utils/genarateToken.js";
-import verifyRefreshToken from "../jwt-utils/verifyRefreshToken.js";
-import responseCreater from "../utils/responseCreater.js";
-const prisma = new PrismaClient();
+/** @format */
+import errConst from '../constants/errors.js';
+import jwtConst from '../constants/jwt.js';
+import resConst from '../constants/responses.js';
+import * as jwt from '../jwt_functions/index.js';
+import prisma from '../prisma/client.js';
+import responseCreator from '../utils/responseCreator.js';
 const token = async (req, res) => {
-  try {
-    const { RefreshToken } = req.cookies;
-    if (!RefreshToken) throw new Error("Token does not exsist");
-    const payload = verifyRefreshToken(RefreshToken);
-    if (!payload) throw new Error("Invalid token");
-    const dbToken = await prisma.logins.findFirst({
-      where: {
-        jwtid: payload.jti,
-      },
-    });
-    if (!dbToken) throw new Error("Token does not exisit in DB");
-    if (dbToken.jwtid !== payload.jti) throw new Error("Invalid Token");
-    const query = await prisma.logins.deleteMany({
-      where: {
-        jwtid: dbToken.jwtid,
-      },
-    });
-    const authToken = genarateToken(
-      {
-        email: payload.email,
-        id: payload.id,
-        userName: payload.userName,
-      },
-      payload.jti
-    );
-    const newRefreshToken = await genarateRefreshToken(
-      {
-        email: payload.email,
-        id: payload.id,
-        userName: payload.userName,
-      },
-      payload.jti
-    );
-    res.cookie("AuthToken", authToken, { httpOnly: true });
-    res.cookie("RefreshToken", newRefreshToken, { httpOnly: true });
-    responseCreater(
-      res,
-      statusCode.Created,
-      statusText.Created,
-      messages.successToken
-    );
-  } catch (err) {
-    console.log(err.message);
-    responseCreater(
-      res,
-      statusCode.Unauthorized,
-      statusText.Unauthorized,
-      messages.invalidToken
-    );
-  }
+	try {
+		const { RefreshToken } = req.cookies;
+
+		//Checking refresh token is exisist or not
+		if (!RefreshToken) {
+			throw new Error(errConst.TokenDoesNotExsist);
+		}
+
+		// Verifying refresh token
+
+		const payload = jwt.verifyRefreshToken(RefreshToken);
+
+		if (!payload) {
+			throw new Error(errConst.InvalidToken);
+		}
+
+		// Checking token is exisist in token or not
+
+		const dbToken = await prisma.logins.findFirst({
+			where: {
+				jwtid: payload.jti,
+			},
+		});
+
+		if (!dbToken) {
+			throw new Error(errConst.TokenDoesNotExisitInDB);
+		}
+
+		if (dbToken.jwtid !== payload.jti) {
+			throw new Error(errConst.InvalidToken);
+		}
+
+		// Deleting previous token in database
+
+		await prisma.logins.deleteMany({
+			where: {
+				jwtid: dbToken.jwtid,
+			},
+		});
+
+		//  storing previous token's payload to create new token
+
+		const tokenPayload = [
+			{
+				email: payload.email,
+				id: payload.id,
+				userName: payload.userName,
+			},
+			payload.jti,
+		];
+
+		// Createing auth token
+
+		const newAuthToken = jwt.genarateToken(...tokenPayload);
+
+		// Generating refresh token
+
+		const newRefreshToken = await jwt.genarateRefreshToken(...tokenPayload);
+
+		//Setting tokens in cookie
+
+		res.cookie(jwtConst.AuthToken, newAuthToken, { httpOnly: true });
+		res.cookie(jwtConst.RefreshToken, newRefreshToken, { httpOnly: true });
+		responseCreator(res, resConst.status.Created, resConst.messages.successToken);
+	} catch (err) {
+		console.log(err.message);
+		responseCreator(res, resConst.status.Unauthorized, resConst.messages.invalidToken);
+	}
 };
 
 export default token;

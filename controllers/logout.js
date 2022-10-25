@@ -1,25 +1,22 @@
-import { PrismaClient } from "@prisma/client";
-import { messages, statusCode, statusText } from "../constants/responses.js";
-import verifyRefreshToken from "../jwt-utils/verifyRefreshToken.js";
-import responseCreater from "../utils/responseCreater.js";
+/** @format */
+
+import { PrismaClient } from '@prisma/client';
+import jwtConst from '../constants/jwt.js';
+import resConst from '../constants/responses.js';
+import { verifyRefreshToken } from '../jwt_functions/index.js';
+import responseCreator from '../utils/responseCreator.js';
 const prisma = new PrismaClient();
 const logout = async (req, res) => {
-  try {
-    const { jti } = await verifyRefreshToken(req.cookies.RefreshToken);
-    const deleteToken = await prisma.logins.deleteMany({
-      where: { jwtid: jti },
-    });
-    res.clearCookie("AuthToken");
-    res.clearCookie("RefreshToken");
-    responseCreater(res, statusCode.OK, statusText.Accepted, messages.logout);
-  } catch (err) {
-    console.log(err.message);
-    responseCreater(
-      res,
-      statusCode.ServerError,
-      statusText.ServerError,
-      messages.sww
-    );
-  }
+	try {
+		const { jti } = verifyRefreshToken(req.cookies.RefreshToken);
+		await prisma.logins.deleteMany({
+			where: { jwtid: jti },
+		});
+		res.clearCookie(jwtConst.AuthToken);
+		res.clearCookie(jwtConst.RefreshToken);
+		responseCreator(res, resConst.status.Accepted, resConst.messages.logout);
+	} catch (err) {
+		responseCreator(res, resConst.status.ServerError, resConst.messages.sww);
+	}
 };
 export default logout;

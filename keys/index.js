@@ -1,3 +1,5 @@
+/** @format */
+
 export const auth_token_private_key = `-----BEGIN RSA PRIVATE KEY-----
 MIICWwIBAAKBgQCtGIGLw078meBZHvimGPZV/am/gZqc4idCZBvShHrIQ6J3niQI
 MQgS6e38YXg9inxPKkpBqxeEM0WCC+RUt1GMlaWShoj51qBOMiZ/cAsfatnVNCNw
