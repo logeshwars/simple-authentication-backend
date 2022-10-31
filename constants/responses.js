@@ -1,5 +1,3 @@
-/** @format */
-
 const resConst = {
 	status: {
 		OK: { code: 200, text: 'Success' },
@@ -28,13 +26,14 @@ const resConst = {
 		updateError: 'Error while updating',
 		userDeleted: 'User deleted successfully',
 		logedin: 'Logged in Successfully',
-		logout: 'Logged out successfully',
+		logout: 'Logged out Successfully',
 		missingId: 'Record ID required',
 		invalidParams: 'Invalid parameters',
 		invalidToken: 'Invalid Token',
 		sww: 'Something went wrong',
 		successToken: 'Token Created Successfully',
 		userExist: 'User already exits',
+		sessionExpired:"Session Expired"
 	},
 };
 

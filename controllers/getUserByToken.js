@@ -1,5 +1,3 @@
-/** @format */
-
 import resConst from '../constants/responses.js';
 import { verifyToken } from '../jwt_functions/index.js';
 import responseCreator from '../utils/responseCreator.js';
@@ -12,7 +10,7 @@ const getUserByToken = (req, res) => {
 			id: payload.id,
 			userName: payload.userName,
 		};
-		return responseCreator(res, resConst.status.OK, resConst.messages.created, data);
+		return responseCreator(res, resConst.status.OK, resConst.messages.userFound, data);
 	} catch (err) {
 		return responseCreator(res, resConst.status.Unauthorized, resConst.messages.invalidToken);
 	}

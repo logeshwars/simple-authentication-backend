@@ -1,5 +1,3 @@
-/** @format */
-
 const errConst = {
 	TokenDoesNotExsist: 'Token does not exsist',
 	InvalidToken: 'Invalid token',

@@ -1,5 +1,3 @@
-/** @format */
-
 import { Router } from 'express';
 import users from '../controllers/users.js';
 import login from '../controllers/login.js';

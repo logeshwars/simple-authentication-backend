@@ -7,8 +7,6 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "nodemon app.js",
-		"lint": "eslint './src/'",
-		"lint:fix": "eslint --fix",
 		"format": "prettier --write './**/*.{js,json}' --config ./.prettierrc"
 	},
 	"author": "logeshwar",
@@ -32,11 +30,7 @@
 		"uuid": "^9.0.0"
 	},
 	"devDependencies": {
-		"eslint": "^8.25.0",
-		"eslint-config-prettier": "^8.5.0",
-		"eslint-plugin-prettier": "^4.2.1",
 		"install": "^0.13.0",
-		"npm": "^8.19.2",
-		"prettier": "^2.7.1"
+		"npm": "^8.19.2"
 	}
 }

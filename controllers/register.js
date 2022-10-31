@@ -9,7 +9,7 @@ const register = async (req, res) => {
 	try {
 		await userSchema.validateAsync(req.body);
 	} catch (err) {
-		return responseCreator(res, resConst.BadRequest, err.message);
+		return responseCreator(res, resConst.status.BadRequest, err.message);
 	}
 	try {
 		const { userName, email, password, dob } = req.body;
@@ -24,7 +24,7 @@ const register = async (req, res) => {
 			},
 		});
 		responseCreator(res, resConst.status.Created, resConst.messages.created);
-	} catch (err) {
+	} catch (e) {
 		if (e instanceof Prisma.PrismaClientKnownRequestError) {
 			if (e.code === 'P2002') {
 				return responseCreator(res, resConst.status.BadRequest, resConst.messages.userExist);

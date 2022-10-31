@@ -1,5 +1,3 @@
-/** @format */
-
 import { PrismaClient } from '@prisma/client';
 import jwtConst from '../constants/jwt.js';
 import resConst from '../constants/responses.js';
@@ -15,6 +13,7 @@ const logout = async (req, res) => {
 		res.clearCookie(jwtConst.AuthToken);
 		res.clearCookie(jwtConst.RefreshToken);
 		responseCreator(res, resConst.status.Accepted, resConst.messages.logout);
+		
 	} catch (err) {
 		responseCreator(res, resConst.status.ServerError, resConst.messages.sww);
 	}

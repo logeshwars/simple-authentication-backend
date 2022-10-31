@@ -1,4 +1,3 @@
-/** @format */
 import errConst from '../constants/errors.js';
 import jwtConst from '../constants/jwt.js';
 import resConst from '../constants/responses.js';
@@ -71,8 +70,7 @@ const token = async (req, res) => {
 		res.cookie(jwtConst.RefreshToken, newRefreshToken, { httpOnly: true });
 		responseCreator(res, resConst.status.Created, resConst.messages.successToken);
 	} catch (err) {
-		console.log(err.message);
-		responseCreator(res, resConst.status.Unauthorized, resConst.messages.invalidToken);
+		responseCreator(res, resConst.status.Unauthorized, resConst.messages.sessionExpired);
 	}
 };
 
