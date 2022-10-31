@@ -1,5 +1,3 @@
-/** @format */
-
 import jwt from 'jsonwebtoken';
 import {
 	refresh_auth_token_private_key,

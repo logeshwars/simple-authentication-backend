@@ -7,17 +7,18 @@ import prisma from '../prisma/client.js';
 import jwtConst from '../constants/jwt.js';
 const login = async (req, res) => {
 	const { email, password } = req.body;
+	const { status, messages } = resConst;
 	const uuid = uuidv4();
 	try {
 		const user = await prisma.user.findFirst({ where: { email } });
 
 		if (!user) {
-			return responseCreator(res, resConst.status.Unauthorized, resConst.messages.invalidCred);
+			return responseCreator(res, status.Unauthorized, messages.invalidCred);
 		}
 		const validatePassword = bcrypt.compareSync(password, user.password);
 
 		if (!validatePassword) {
-			return responseCreator(res, resConst.status.Unauthorized, resConst.messages.invalidCred);
+			return responseCreator(res, status.Unauthorized, messages.invalidCred);
 		}
 		const tokenPayload = [
 			{
@@ -33,9 +34,9 @@ const login = async (req, res) => {
 
 		res.cookie(jwtConst.AuthToken, token, { httpOnly: true });
 		res.cookie(jwtConst.RefreshToken, refreshToken, { httpOnly: true });
-		return responseCreator(res, resConst.status.Accepted, resConst.messages.logedin);
+		return responseCreator(res, status.Accepted, messages.logedin);
 	} catch (err) {
-		responseCreator(res, resConst.status.BadRequest, resConst.messages.errLog);
+		responseCreator(res, status.BadRequest, messages.errLog);
 	}
 };
 export default login;

@@ -4,6 +4,7 @@ import resConst from '../constants/responses.js';
 import { verifyRefreshToken } from '../jwt_functions/index.js';
 import responseCreator from '../utils/responseCreator.js';
 const prisma = new PrismaClient();
+const { status, messages } = resConst;
 const logout = async (req, res) => {
 	try {
 		const { jti } = verifyRefreshToken(req.cookies.RefreshToken);
@@ -12,10 +13,9 @@ const logout = async (req, res) => {
 		});
 		res.clearCookie(jwtConst.AuthToken);
 		res.clearCookie(jwtConst.RefreshToken);
-		responseCreator(res, resConst.status.Accepted, resConst.messages.logout);
-		
+		responseCreator(res, status.Accepted, messages.logout);
 	} catch (err) {
-		responseCreator(res, resConst.status.ServerError, resConst.messages.sww);
+		responseCreator(res, status.ServerError, messages.sww);
 	}
 };
 export default logout;

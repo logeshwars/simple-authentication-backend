@@ -4,6 +4,7 @@ import resConst from '../constants/responses.js';
 import * as jwt from '../jwt_functions/index.js';
 import prisma from '../prisma/client.js';
 import responseCreator from '../utils/responseCreator.js';
+const { status, messages } = resConst;
 const token = async (req, res) => {
 	try {
 		const { RefreshToken } = req.cookies;
@@ -68,9 +69,9 @@ const token = async (req, res) => {
 
 		res.cookie(jwtConst.AuthToken, newAuthToken, { httpOnly: true });
 		res.cookie(jwtConst.RefreshToken, newRefreshToken, { httpOnly: true });
-		responseCreator(res, resConst.status.Created, resConst.messages.successToken);
+		responseCreator(res, status.Created, messages.successToken);
 	} catch (err) {
-		responseCreator(res, resConst.status.Unauthorized, resConst.messages.sessionExpired);
+		responseCreator(res, status.Unauthorized, messages.sessionExpired);
 	}
 };
 

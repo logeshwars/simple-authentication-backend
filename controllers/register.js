@@ -5,11 +5,12 @@ import responseCreator from '../utils/responseCreator.js';
 import resConst from '../constants/responses.js';
 import userSchema from '../schema/user.schema.js';
 const prisma = new PrismaClient();
+const { status, messages } = resConst;
 const register = async (req, res) => {
 	try {
 		await userSchema.validateAsync(req.body);
 	} catch (err) {
-		return responseCreator(res, resConst.status.BadRequest, err.message);
+		return responseCreator(res, status.BadRequest, err.message);
 	}
 	try {
 		const { userName, email, password, dob } = req.body;
@@ -23,14 +24,14 @@ const register = async (req, res) => {
 				password: haspassword,
 			},
 		});
-		responseCreator(res, resConst.status.Created, resConst.messages.created);
+		responseCreator(res, status.Created, messages.created);
 	} catch (e) {
 		if (e instanceof Prisma.PrismaClientKnownRequestError) {
 			if (e.code === 'P2002') {
-				return responseCreator(res, resConst.status.BadRequest, resConst.messages.userExist);
+				return responseCreator(res, status.BadRequest, messages.userExist);
 			}
 		}
-		responseCreator(res, resConst.status.BadRequest, resConst.messages.createError);
+		responseCreator(res, status.BadRequest, messages.createError);
 	}
 };
 export default register;

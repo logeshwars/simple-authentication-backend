@@ -3,6 +3,7 @@ import { verifyToken } from '../jwt_functions/index.js';
 import responseCreator from '../utils/responseCreator.js';
 const getUserByToken = (req, res) => {
 	const { AuthToken } = req.cookies;
+	const { status, messages } = resConst;
 	try {
 		const payload = verifyToken(AuthToken);
 		const data = {
@@ -10,9 +11,9 @@ const getUserByToken = (req, res) => {
 			id: payload.id,
 			userName: payload.userName,
 		};
-		return responseCreator(res, resConst.status.OK, resConst.messages.userFound, data);
+		return responseCreator(res, status.OK, messages.userFound, data);
 	} catch (err) {
-		return responseCreator(res, resConst.status.Unauthorized, resConst.messages.invalidToken);
+		return responseCreator(res, status.Unauthorized, messages.invalidToken);
 	}
 };
 export default getUserByToken;
