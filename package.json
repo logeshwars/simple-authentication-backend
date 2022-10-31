@@ -1,5 +1,5 @@
 {
-	"name": "moviebook",
+	"name": "simple-authentication-backend",
 	"version": "1.0.0",
 	"description": "Api for movie book",
 	"main": "app.js",
