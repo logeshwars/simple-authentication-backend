@@ -25,6 +25,7 @@ const login = async (req, res) => {
 				email: user.email,
 				id: user.id,
 				userName: user.userName,
+				role: user.role
 			},
 			uuid,
 		];

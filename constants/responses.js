@@ -33,7 +33,8 @@ const resConst = {
 		sww: 'Something went wrong',
 		successToken: 'Token Created Successfully',
 		userExist: 'User already exits',
-		sessionExpired:"Session Expired"
+		sessionExpired:"Session Expired",
+		permissionDenied:'Permission Denied'
 	},
 };
 

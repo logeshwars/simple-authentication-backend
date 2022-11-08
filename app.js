@@ -1,5 +1,3 @@
-/** @format */
-
 import express, { json } from 'express';
 import { fileURLToPath } from 'url';
 import user from './routers/user.js';

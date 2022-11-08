@@ -14,6 +14,7 @@ const userSchema = Joi.object({
 		minDomainSegments: 2,
 		tlds: { allow: ['com', 'net'] },
 	}),
+	role:Joi.string()
 });
 
 export default userSchema;

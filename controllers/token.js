@@ -53,6 +53,7 @@ const token = async (req, res) => {
 				email: payload.email,
 				id: payload.id,
 				userName: payload.userName,
+				role:payload.role
 			},
 			payload.jti,
 		];
@@ -70,6 +71,7 @@ const token = async (req, res) => {
 		res.cookie(jwtConst.AuthToken, newAuthToken, { httpOnly: true });
 		res.cookie(jwtConst.RefreshToken, newRefreshToken, { httpOnly: true });
 		responseCreator(res, status.Created, messages.successToken);
+
 	} catch (err) {
 		responseCreator(res, status.Unauthorized, messages.sessionExpired);
 	}

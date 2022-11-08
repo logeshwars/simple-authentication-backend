@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import jwtConst from '../constants/jwt.js';
 import {
 	refresh_auth_token_private_key,
 	auth_token_private_key,
@@ -44,3 +45,18 @@ export const verifyRefreshToken = (token) => {
 export const verifyToken = (token) => {
 	return jwt.verify(token, auth_token_public_key);
 };
+
+export const verifyAdmin = async (token)=>
+{
+	const payload = jwt.verify(token, auth_token_public_key);
+    const user = await prisma.user.findFirst({ where: { email:payload.email } });
+	if ((user.role === payload.role) && (payload.role === jwtConst.RoleAdmin))
+	{
+		return true;
+	}
+	else 
+	{ 
+		return false;
+	}
+
+}

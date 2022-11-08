@@ -1,7 +1,7 @@
 {
 	"name": "simple-authentication-backend",
 	"version": "1.0.0",
-	"description": "Api for movie book",
+	"description": "Api for simple-authentication",
 	"main": "app.js",
 	"type": "module",
 	"scripts": {
