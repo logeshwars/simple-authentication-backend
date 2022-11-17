@@ -16,5 +16,5 @@ user.get('/', auth, users);
 user.get('/token', token);
 user.post('/logout', logout);
 user.get('/getuser', getUserByToken);
-user.post('/deleteuser',adminAuth,deleteUser);
+user.post('/deleteuser', adminAuth, deleteUser);
 export default user;

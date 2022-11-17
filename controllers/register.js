@@ -3,7 +3,7 @@ import responseCreator from '../utils/responseCreator.js';
 import resConst from '../constants/responses.js';
 import userSchema from '../schema/user.schema.js';
 import prisma from '../prisma/client.js';
-import * as jwt from "../jwt_functions/index.js"
+import * as jwt from '../jwt_functions/index.js';
 import jwtConst from '../constants/jwt.js';
 import { Prisma } from '@prisma/client';
 const { status, messages } = resConst;
@@ -16,7 +16,7 @@ const register = async (req, res) => {
 		return responseCreator(res, status.BadRequest, err.message);
 	}
 	try {
-		const { userName, email, password, dob , role = defaultRole } = req.body;
+		const { userName, email, password, dob, role = defaultRole } = req.body;
 		const salt = await bcrypt.genSalt(10);
 		const haspassword = await bcrypt.hash(password, salt);
 		await prisma.user.create({
@@ -25,7 +25,7 @@ const register = async (req, res) => {
 				email,
 				dob: new Date(dob),
 				password: haspassword,
-				role: await jwt.verifyAdmin(AuthToken) ? role : defaultRole
+				role: (await jwt.verifyAdmin(AuthToken)) ? role : defaultRole,
 			},
 		});
 		responseCreator(res, status.Created, messages.created);

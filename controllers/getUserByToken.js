@@ -10,7 +10,7 @@ const getUserByToken = (req, res) => {
 			email: payload.email,
 			id: payload.id,
 			userName: payload.userName,
-			role:payload.role
+			role: payload.role,
 		};
 		return responseCreator(res, status.OK, messages.userFound, data);
 	} catch (err) {

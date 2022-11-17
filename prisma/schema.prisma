@@ -15,7 +15,7 @@ model User {
   userName String
   email    String
   password String
-  Logins   Logins[] @relation("logins") 
+  Logins   Logins[] @relation("logins")
   dob      DateTime
   role     String
 
@@ -29,7 +29,7 @@ model Logins {
   loginTime    DateTime @default(now())
   jwtid        String
   userId       String
-  logins       User     @relation("logins", fields: [userId], references: [id],onDelete: Cascade)
+  logins       User     @relation("logins", fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, jwtid])
 }
