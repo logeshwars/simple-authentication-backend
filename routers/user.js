@@ -8,6 +8,7 @@ import logout from '../controllers/logout.js';
 import getUserByToken from '../controllers/getUserByToken.js';
 import deleteUser from '../controllers/deleteUser.js';
 import adminAuth from '../middlewares/adminAuth.js';
+import getCurrentUserDetails from '../controllers/getCurrentUserdetails.js';
 const user = Router();
 
 user.post('/register', register);
@@ -17,4 +18,5 @@ user.get('/token', token);
 user.post('/logout', logout);
 user.get('/getuser', getUserByToken);
 user.post('/deleteuser', adminAuth, deleteUser);
+user.get('/getcurrentuserdetails',getCurrentUserDetails);
 export default user;

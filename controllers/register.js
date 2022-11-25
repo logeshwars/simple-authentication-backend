@@ -25,11 +25,12 @@ const register = async (req, res) => {
 				email,
 				dob: new Date(dob),
 				password: haspassword,
-				role: (await jwt.verifyAdmin(AuthToken)) ? role : defaultRole,
+				role: (AuthToken && await jwt.verifyAdmin(AuthToken)) ? role : defaultRole,
 			},
 		});
 		responseCreator(res, status.Created, messages.created);
 	} catch (e) {
+
 		if (e instanceof Prisma.PrismaClientKnownRequestError) {
 			if (e.code === 'P2002') {
 				return responseCreator(res, status.BadRequest, messages.userExist);

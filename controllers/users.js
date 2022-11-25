@@ -3,6 +3,14 @@ import prisma from '../prisma/client.js';
 import responseCreator from '../utils/responseCreator.js';
 const users = async (req, res) => {
 	const { status, messages } = resConst;
+	const { user } = req;
+	const outFields = {
+		id: true,
+		userName: true,
+		email: true,
+		dob: true,
+		role: true,
+	};
 	const defaultDataLimit = 6,
 		defaultPage = 0,
 		orderDataBy = 'desc';
@@ -13,15 +21,18 @@ const users = async (req, res) => {
 				where: {
 					id: id,
 				},
+				select: outFields,
 			});
 			if (!user) return responseCreator(res, status.NotFound, messages.userNotFound);
 			responseCreator(res, status.Accepted, messages.userFound, user);
 		} else {
 			const { _limit = defaultDataLimit, _page = defaultPage } = req.query;
 			const users = await prisma.user.findMany({
+				where: { NOT: { id: user.id } },
 				take: Number(_limit),
 				skip: Number(_page) * Number(_limit),
 				orderBy: { dob: orderDataBy },
+				select: outFields,
 			});
 			const last_page = Math.floor((await prisma.user.count()) / _limit);
 			if (users.length === 0) {

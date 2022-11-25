@@ -7,21 +7,23 @@ import {
 	auth_token_public_key,
 } from '../keys/index.js';
 import prisma from '../prisma/client.js';
-import jwtConfig from './config.js';
-export const genarateRefreshToken = async (payload, jwtid) => {
+import {authTokenConfig,refreshTokenConfig} from './config.js';
+export const genarateRefreshToken = async (payload, jwtid,keepLogged) => {
 	var verifyOptions = {
-		...jwtConfig,
+		...refreshTokenConfig,
 		jwtid: jwtid,
+		...(keepLogged && {expiresIn: '7d'})
 	};
+
 	const refreshToken = jwt.sign(payload, refresh_auth_token_private_key, verifyOptions);
 	await prisma.logins.deleteMany({
 		where: {
 			userId: payload.id,
 		},
 	});
+
 	await prisma.logins.create({
 		data: {
-			refreshToken: refreshToken,
 			userId: payload.id,
 			jwtid,
 		},
@@ -31,7 +33,7 @@ export const genarateRefreshToken = async (payload, jwtid) => {
 
 export const genarateToken = (payload, jwtid) => {
 	var verifyOptions = {
-		...jwtConfig,
+		...authTokenConfig,
 		jwtid: jwtid,
 	};
 	let token = jwt.sign(payload, auth_token_private_key, verifyOptions);

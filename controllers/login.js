@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import prisma from '../prisma/client.js';
 import jwtConst from '../constants/jwt.js';
 const login = async (req, res) => {
-	const { email, password } = req.body;
+	const { email, password,keepLogged } = req.body;
 	const { status, messages } = resConst;
 	const uuid = uuidv4();
 	try {
@@ -28,10 +28,11 @@ const login = async (req, res) => {
 				role: user.role
 			},
 			uuid,
+
 		];
 
 		const token = jwt.genarateToken(...tokenPayload);
-		const refreshToken = await jwt.genarateRefreshToken(...tokenPayload);
+		const refreshToken = await jwt.genarateRefreshToken(...tokenPayload,keepLogged);
 
 		res.cookie(jwtConst.AuthToken, token, { httpOnly: true });
 		res.cookie(jwtConst.RefreshToken, refreshToken, { httpOnly: true });

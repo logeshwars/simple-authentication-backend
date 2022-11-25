@@ -25,7 +25,6 @@ model User {
 
 model Logins {
   id           String   @id @default(uuid())
-  refreshToken String
   loginTime    DateTime @default(now())
   jwtid        String
   userId       String

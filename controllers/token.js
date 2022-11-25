@@ -8,12 +8,7 @@ const { status, messages } = resConst;
 const token = async (req, res) => {
 	try {
 		const { RefreshToken } = req.cookies;
-
-		//Checking refresh token is exisist or not
-		if (!RefreshToken) {
-			throw new Error(errConst.TokenDoesNotExsist);
-		}
-
+		
 		// Verifying refresh token
 
 		const payload = jwt.verifyRefreshToken(RefreshToken);
